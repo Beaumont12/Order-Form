@@ -1,34 +1,35 @@
-import React, { useState } from 'react';
-import { db } from './firebaseConfig';
-import { collection, addDoc } from 'firebase/firestore'; 
+import React, { useState } from 'react';   // Imports: Import necessary libraries and functions:
+import { db } from './firebaseConfig';     // React and useState from React for building the component and managing state.
+import { collection, addDoc } from 'firebase/firestore';    // db from your Firebase configuration file to interact with Firestore.
+                                            // collection and addDoc from Firestore to handle adding documents to a collection.
 
-const TicketOrderForm = () => {
+const TicketOrderForm = () => {     // Initialize state variables using useState for storing the form input values
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');     
   const [ticketType, setTicketType] = useState('');
   const [quantity, setQuantity] = useState('');
   const [phone, setPhone] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => { // function for submitting to the database
     e.preventDefault();
 
     try {
-      const docRef = await addDoc(collection(db, 'ticketOrders'), {
-        name,
+      const docRef = await addDoc(collection(db, 'ticketOrders'), { //responsible for generating a unique key for each ticket order
+        name,                                             // Call addDoc to add a new document to the ticketOrders collection in Firestore
         email,
         ticketType,
-        quantity: parseInt(quantity),
+        quantity: parseInt(quantity),  // Convert the quantity from a string to an integer
         phone,
-        timestamp: new Date()
+        timestamp: new Date()   // Add a timestamp
       });
-      console.log('Document written with ID: ', docRef.id);
+      console.log('Document written with ID: ', docRef.id); // Log the document ID to the console and display an alert on successful submission
       alert('Ticket order submitted successfully!');
-      setName('');
+      setName('');            // Clear forms
       setEmail('');
       setTicketType('');
       setQuantity('');
       setPhone('');
-    } catch (error) {
+    } catch (error) {         // Handle errors by logging the error to the console and displaying an alert if the submission fails
       console.error('Error adding document: ', error);
       alert('Failed to submit ticket order. Please try again later.');
     }
